@@ -5,9 +5,10 @@ import { jsx } from 'react/jsx-runtime';
 
 function App() {
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState("chicken");
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get('https://www.themealdb.com/api/json/v1/1/search.php?s=chicken', {
+      const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`, {
         headers: {
           "Content-Type": "application/json"
         }
@@ -17,12 +18,35 @@ function App() {
       }
     }
     fetchData();
-  }, [])
+  }, [search])
+
+  function handleChange(e) {
+    const value = e.target.value;
+    setSearch(value);
+
+  }
+
+  function handleSubmit(){
+    setData((prev) => (
+      {
+        ...prev,
+
+      }
+    ))
+  }
 
 
 
   return (
     <>
+        <div className="wrap">
+      <div className="search">
+          <input type="text" className="searchTerm" placeholder="What are you looking for?" onChange={handleChange} />
+          <button type="submit" className="searchButton" onClick={handleSubmit} disabled={search === "" ? true : false}>
+          🔍 
+        </button>
+      </div>
+    </div>
       {data && data.map((draft) => (
         <div className="container">
           <div className="card">
